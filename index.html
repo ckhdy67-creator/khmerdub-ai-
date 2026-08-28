@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KhmerDub AI Studio</title>
+    <style>
+        body {
+            background-color: #030712;
+            color: #fff;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #1e293b;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            background: #1e293b;
+            padding: 12px 16px;
+            border-radius: 10px;
+        }
+        .title {
+            color: #c084fc;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .badge {
+            background: #3b0764;
+            color: #d8b4fe;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            border: 1px solid #6b21a8;
+        }
+        .btn-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .btn {
+            background: #9333ea;
+            color: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn-gradient {
+            background: linear-gradient(to right, #db2777, #9333ea);
+        }
+        .video-box {
+            width: 100%;
+            height: 220px;
+            background: #000;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 13px;
+            border: 1px solid #1e293b;
+            text-align: center;
+            padding: 15px;
+            box-sizing: border-box;
+            position: relative;
+            overflow: hidden;
+        }
+        .video-box video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            display: none;
+        }
+        .status-footer {
+            margin-top: 14px;
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <span class="title">🎬 KhmerDub AI Studio</span>
+            <span class="badge" id="statusBadge">⚡ ត្រៀមរួចរាល់</span>
+        </div>
+
+        <div class="btn-group">
+            <label class="btn" style="cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                📁 រើសវីដេអូ
+                <input type="file" id="videoInput" accept="video/*" style="display: none;" onchange="loadVideo(event)">
+            </label>
+            <button class="btn btn-gradient" onclick="startDubbing()">✨ បញ្ចូលសំឡេងខ្មែរ</button>
+        </div>
+
+        <div class="video-box" id="videoBox">
+            <p id="placeholderText">📺 សូមចុចជ្រើសរើសវីដេអូរឿងចិន ដើម្បីបកប្រែជាសំឡេងខ្មែរ</p>
+            <video id="videoPreview" controls></video>
+        </div>
+
+        <div class="status-footer">
+            <span>🇨🇳 រឿងចិន ➔ 🇰🇭 បកប្រែសំឡេងខ្មែរដោយ AI</span>
+        </div>
+    </div>
+
+    <script>
+        function loadVideo(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const videoPreview = document.getElementById('videoPreview');
+                const placeholderText = document.getElementById('placeholderText');
+                
+                videoPreview.src = URL.createObjectURL(file);
+                videoPreview.style.display = 'block';
+                placeholderText.style.display = 'none';
+                
+                document.getElementById('statusBadge').innerText = '✅ បានផ្ទុកវីដេអូ';
+            }
+        }
+
+        function startDubbing() {
+            const videoPreview = document.getElementById('videoPreview');
+            if (!videoPreview.src) {
+                alert('សូមជ្រើសរើសវីដេអូជាមុនសិនបង!');
+                return;
+            }
+            
+            document.getElementById('statusBadge').innerText = '⏳ កំពុងដំណើរការ...';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 30;
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    document.getElementById('statusBadge').innerText = '✅ រួចរាល់ (សំឡេងខ្មែរ)';
+                    alert('ការបកប្រែ និងបញ្ចូលសំឡេងខ្មែរជោគជ័យ!');
+                }
+            }, 600);
+        }
+    </script>
+
+</body>
+</html>
