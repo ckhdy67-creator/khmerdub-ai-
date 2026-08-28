@@ -19,10 +19,27 @@ def dub_video():
         
         video_file = request.files['video']
         
+        # រក្សាទុកវីដេអូបណ្តោះអាសន្នក្នុង Server
+        upload_dir = './uploads'
+        os.makedirs(upload_dir, exist_ok=True)
+        file_path = os.path.join(upload_dir, video_file.filename)
+        video_file.save(file_path)
+        
+        # ផ្ញើឯកសារទៅកាន់ OpenAI Whisper API ដើម្បីស្តាប់និងបកប្រែ
+        with open(file_path, "rb") as audio_file:
+            transcript = client.audio.transcriptions.create(
+                model="whisper-1",
+                file=audio_file,
+                response_format="text"
+            )
+        
+        # លុបហ្វាលចោលវិញដើម្បីកុំឱ្យពេញ Server
+        os.remove(file_path)
+        
         return jsonify({
             'success': True,
-            'message': 'បានទទួលវីដេអូរឿងចិន និងកំពុងបប្រែជាសំឡេងខ្មែរដោយ AI!',
-            'filename': video_file.filename
+            'message': 'បកប្រែជោគជ័យដោយ AI!',
+            'translation': transcript
         })
         
     except Exception as e:
